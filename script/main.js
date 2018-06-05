@@ -52,11 +52,12 @@ const debitsAndCredits = [
 
 function balanceSheetTemplate(showBalanceSheet) {
 
-    function transactionType(type) {
+    function transactionType() {
+        let type;
         if (type = showBalanceSheet.from) {
-            console.log('FROM')
+            return 'From'
         } else if (type = showBalanceSheet.to) {
-            console.log('TO')
+            return 'To'
         }
     }
 
@@ -81,6 +82,4 @@ function balanceSheetTemplate(showBalanceSheet) {
 
 document.getElementById("app").innerHTML = `
     <h1 class="app-title"> Balance Sheet ${debitsAndCredits.length}</h1>
-    ${debitsAndCredits.map(balanceSheetTemplate).join('')}
-    <p class="footer"> These ${debitsAndCredits.length} pets were added recently, check back soon for updates. </p>
-`;
+    ${debitsAndCredits.map(balanceSheetTemplate).join('')}`;
