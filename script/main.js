@@ -1,4 +1,18 @@
-const debitsAndCredits = [
+
+fetch('apiserver/result.json')
+.then(result => {
+    console.log(result);
+    return result.json();
+})
+.then(data => {
+    console.log(data);
+})
+.catch(error => 
+    console.log(error)
+)
+
+
+/* const debitsAndCredits = [
     {
         "from": "Wendy",
         "description": "Diner",
@@ -61,6 +75,8 @@ function balanceSheetTemplate(showBalanceSheet) {
         }
     }
 
+
+
     return `
     <table class="debitsAndCredits">
         <tr>
@@ -83,3 +99,5 @@ function balanceSheetTemplate(showBalanceSheet) {
 document.getElementById("app").innerHTML = `
     <h1 class="app-title"> Balance Sheet ${debitsAndCredits.length}</h1>
     ${debitsAndCredits.map(balanceSheetTemplate).join('')}`;
+
+*/
