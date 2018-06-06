@@ -1,18 +1,166 @@
 
-fetch('apiserver/result.json')
-.then(result => {
-    console.log(result);
-    return result.json();
-})
-.then(data => {
-    console.log(data);
-})
-.catch(error => 
-    console.log(error)
-)
+/*
+var osomMovie = {};
+
+osomMovie.init = function() {
+    osomMovie.filterSlider()
+}
+
+osomMovie.filterSlider = function() {
+
+    $('.filter.open').on('click', function() {
+        $('.filter_container').slideToggle(300, function() {
+
+            var btn = $(this).prev();
+
+            if(btn.hasClass('active')) {
+                $('.filter.open').find('.btn_title').text('Filter by');
+                btn.removeClass('active');
+            } else {
+                $('.filter.open').find('.btn_title').text('Close');
+                btn.addClass('active');
+            }
+        });
+    });
+
+};
+
+osomMovie.init();
+*/
 
 
-/* const debitsAndCredits = [
+
+
+
+
+/*
+var accInfoAccount = document.querySelector('.account-information__account');
+var accInfoCurrency = document.querySelector('.account-information__currency');
+var accInfoDebitCredit = document.querySelector('.account-information__debits-and-credits');
+
+var requestURL = 'apiserver/result.json';
+var request = new XMLHttpRequest();
+request.open('GET', requestURL);
+
+
+request.responseType = 'json';
+request.send();
+
+request.onload = function() {
+    var balanceSheet = request.response;
+    // infoAccount(balanceSheet);
+    infoCurrency(balanceSheet);
+    // infoDebCred(balanceSheet);
+}
+
+function infoCurrency(jsonObj) {
+    var myH1 = document.createElement('h1');
+    myH1.textContent = jsonObj['currency'];
+    accInfoCurrency.appendChild(myH1);
+
+    var myPara = document.createElement('p');
+    myPara.textContent = 'Hometown: ' + jsonObj['homeTown'] + ' // Formed: ' + jsonObj['formed'];
+    header.appendChild(myPara);
+
+}
+*/
+
+/*
+
+var header = document.querySelector('header');
+var section = document.querySelector('section');
+
+var requestURL = 'apiserver/result.json';
+
+var request = new XMLHttpRequest();
+
+request.open('GET', requestURL);
+
+request.responseType = 'json';
+request.send();
+
+request.onload = function() {
+    var superHeroes = request.response;
+    populateHeader(superHeroes);
+    showHeroes(superHeroes);
+  }
+
+function populateHeader(jsonObj) {
+    var myH1 = document.createElement('h1');
+    myH1.textContent = jsonObj['squadName'];
+    header.appendChild(myH1);
+
+    var myPara = document.createElement('p');
+    myPara.textContent = 'Hometown: ' + jsonObj['homeTown'] + ' // Formed: ' + jsonObj['formed'];
+    header.appendChild(myPara);
+}
+
+
+function showHeroes(jsonObj) {
+    var heroes = jsonObj['members'];
+        
+    for (var i = 0; i < heroes.length; i++) {
+      var myArticle = document.createElement('article');
+      var myH2 = document.createElement('h2');
+      var myPara1 = document.createElement('p');
+      var myPara2 = document.createElement('p');
+      var myPara3 = document.createElement('p');
+      var myList = document.createElement('ul');
+  
+      myH2.textContent = heroes[i].name;
+      myPara1.textContent = 'Secret identity: ' + heroes[i].secretIdentity;
+      myPara2.textContent = 'Age: ' + heroes[i].age;
+      myPara3.textContent = 'Superpowers:';
+          
+      var superPowers = heroes[i].powers;
+      for (var j = 0; j < superPowers.length; j++) {
+        var listItem = document.createElement('li');
+        listItem.textContent = superPowers[j];
+        myList.appendChild(listItem);
+      }
+  
+      myArticle.appendChild(myH2);
+      myArticle.appendChild(myPara1);
+      myArticle.appendChild(myPara2);
+      myArticle.appendChild(myPara3);
+      myArticle.appendChild(myList);
+  
+      section.appendChild(myArticle);
+    }
+  }
+
+*/
+
+
+
+
+/*
+created = () => {
+
+    fetch('apiserver/result.json')
+    .then(result => {
+        console.log(result);
+        return result.json();
+    })
+    .then(data => {
+        // console.log(data);
+        const acountDetails = data.account;
+        console.log(`This account is belong to ${acountDetails.name}`)
+    })
+    .catch(error => 
+        console.log(error)
+    )
+}
+
+created();
+*/
+
+
+
+
+
+/*
+const debitsAndCredits = [
     {
         "from": "Wendy",
         "description": "Diner",
@@ -63,6 +211,10 @@ fetch('apiserver/result.json')
     }
 ]
 
+*/
+
+const debitsAndCredits = 'apiserver/server.js';
+
 
 function balanceSheetTemplate(showBalanceSheet) {
 
@@ -100,4 +252,3 @@ document.getElementById("app").innerHTML = `
     <h1 class="app-title"> Balance Sheet ${debitsAndCredits.length}</h1>
     ${debitsAndCredits.map(balanceSheetTemplate).join('')}`;
 
-*/
