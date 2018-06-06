@@ -11,11 +11,15 @@ aBankAccount.onload = function() {
     document.querySelector('.account-iban').textContent = `IBAN: ${dataABankAccount.account.iban}`;
     document.querySelector('.account-balance').textContent = `Balance: ${dataABankAccount.account.balance}`;
     document.querySelector('.account-currency').textContent = `Currency: ${dataABankAccount.currency}`;
+
+    document.querySelector('.debits-and-credits__type').textContent = dataABankAccount.debitsAndCredits[1].from;
+    document.querySelector('.debits-and-credits__description').textContent = dataABankAccount.debitsAndCredits[1].description;
+    document.querySelector('.debits-and-credits__amount').textContent = dataABankAccount.debitsAndCredits[1].amount;
+    document.querySelector('.debits-and-credits__date').textContent = dataABankAccount.debitsAndCredits[1].date;
     
     
     
     
-    console.log(dataABankAccount.debitsAndCredits[1].description)
     // renderHTML(dataABankAccount)
     
 };
