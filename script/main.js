@@ -9,9 +9,12 @@ aBankAccount.onload = function() {
     document.querySelector('.account-details__balance').textContent = `Balance: ${dataABankAccount.account.balance}`;
     document.querySelector('.account-details__currency').textContent = `Currency: ${dataABankAccount.currency}`;
 
+    // console.log(dataABankAccount.account.name)
+    
 };
 
 aBankAccount.send();
+
 
 
 // BUDGET CONTROLLER
