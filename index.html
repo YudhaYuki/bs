@@ -11,28 +11,42 @@
 </head>
 <body>
 
-    <header>
+    <div class="container">
+
+    <header class="header-title">
         <h1>Balance Sheet</h1>
-        <!--
-            <button id="btn">Fetch info for 3 new animals</button> 
-        -->
     </header>
-
-    <div id="animal-info"></div>
-
-
+    
     <div class="account-details">
-        <p class="account-name"></p>
-        <p class="account-iban"></p>
-        <p class="account-balance"></p>
+        <p class="account-details__name"></p>
+        <p class="account-details__iban"></p>
+        <p class="account-details__balance"></p>
+        <p class="account-details__currency"></p>
     </div>
 
-    <div>
-            <p class="account-currency"></p>                    
+    <div class="input-transactions">
+        <form action="/">
+            <label for="country">Transaction Type</label>
+            <select id="country" name="country">
+                <option selected>Select</option>
+                <option value="from">From</option>
+                <option value="to">To</option>
+            </select>
+
+            <label for="description">Description</label>
+            <input type="text" id="fname" name="description" placeholder="Description">
+        
+            <label for="amount">Amount</label>
+            <input type="text" id="lname" name="amount" placeholder="Amount.">
+
+            <label for="date">Date</label>
+            <input type="date" id="lname" name="date" placeholder="Date">
+        
+            <input type="submit" value="Add">
+        </form>
     </div>
 
 
-    <!--
     <div class="debits-and-credits">
         <table>
             <tr>
@@ -42,7 +56,6 @@
                 <th>DATE</th>
             </tr>
             <tr>
-                <td class="debits-and-credits__from"></td>
                 <td class="debits-and-credits__to"></td>   
                 <td class="debits-and-credits__description"></td>
                 <td class="debits-and-credits__amount"></td>
@@ -50,10 +63,12 @@
             </tr>       
         </table>
     </div>
-    -->             
+
+</div>
 
     <script src="script/main.js"></script> 
         
+
 
     
 </body>
