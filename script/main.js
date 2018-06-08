@@ -1,35 +1,11 @@
-var databaseController = (function() {
-
-    let accountJackTorrance = new XMLHttpRequest();
-    accountJackTorrance.open('GET', 'http://localhost:8080/api/balance');
-    accountJackTorrance.onload = function() {
-        var i;
-        var dataAccountJackTorrance = JSON.parse(accountJackTorrance.responseText);
-        // console.log(dataAccountJackTorrance.currency)
-        document.querySelector('.account-details__name').textContent = `Account Holder: ${dataAccountJackTorrance.account.name}`;
-        document.querySelector('.account-details__iban').textContent = `IBAN: ${dataAccountJackTorrance.account.iban}`;
-        document.querySelector('.account-details__balance').textContent = `Balance: ${dataAccountJackTorrance.account.balance}`;
-        document.querySelector('.account-details__currency').textContent = `Currency: ${dataAccountJackTorrance.currency}`;
-    
-        // console.log(dataAccountJackTorrance.account.name)
-        
-    };
-    
-    accountJackTorrance.send();
-
-})();
-
-
-
-
-
 // BUDGET CONTROLLER
-var budgetController = (function() {
+var balanceSheetController = (function() {
     
-    var Expense = function(id, description, value) {
+    var Expense = function(id, description, value, date) {
         this.id = id;
         this.description = description;
         this.value = value;
+        this.date = date;        
         this.percentage = -1;
     };
     
@@ -48,10 +24,11 @@ var budgetController = (function() {
     };
     
     
-    var Income = function(id, description, value) {
+    var Income = function(id, description, value, date) {
         this.id = id;
         this.description = description;
         this.value = value;
+        this.date = date;        
     };
     
     
@@ -73,13 +50,13 @@ var budgetController = (function() {
             exp: 0,
             inc: 0
         },
-        budget: 0,
+        balance: 0,
         percentage: -1
     };
     
     
     return {
-        addItem: function(type, des, val) {
+        addItem: function(type, des, val, dat) {
             var newItem, ID;
             
             //[1 2 3 4 5], next ID = 6
@@ -95,9 +72,9 @@ var budgetController = (function() {
             
             // Create new item based on 'inc' or 'exp' type
             if (type === 'exp') {
-                newItem = new Expense(ID, des, val);
+                newItem = new Expense(ID, des, val, dat);
             } else if (type === 'inc') {
-                newItem = new Income(ID, des, val);
+                newItem = new Income(ID, des, val, dat);
             }
             
             // Push it into our data structure
@@ -129,14 +106,14 @@ var budgetController = (function() {
         },
         
         
-        calculateBudget: function() {
+        calculateBalanceSheet: function() {
             
             // calculate total income and expenses
             calculateTotal('exp');
             calculateTotal('inc');
             
             // Calculate the budget: income - expenses
-            data.budget = data.totals.inc - data.totals.exp;
+            data.balanceSheet = data.totals.inc - data.totals.exp;
             
             // calculate the percentage of income that we spent
             if (data.totals.inc > 0) {
@@ -174,9 +151,9 @@ var budgetController = (function() {
         },
         
         
-        getBudget: function() {
+        getBalanceSheet: function() {
             return {
-                budget: data.budget,
+                balanceSheet: data.balanceSheet,
                 totalInc: data.totals.inc,
                 totalExp: data.totals.exp,
                 percentage: data.percentage
@@ -210,7 +187,11 @@ var UIController = (function() {
         percentageLabel: '.budget__expenses--percentage',
         container: '.container',
         expensesPercLabel: '.item__percentage',
-        dateLabel: '.budget__title--month'
+        dateLabel: '.budget__title--month',
+        accountNameHolder: '.account-details__name',
+        accountIban: '.account-details__iban',
+        accountBalance: '.account-details__balance',
+        accountCurrency: '.account-details__currency'        
     };
     
     
@@ -268,17 +249,19 @@ var UIController = (function() {
             if (type === 'inc') {
                 element = DOMstrings.incomeContainer;
                 
-                html = '<div class="item clearfix" id="inc-%id%"> <div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+                html = '<div class="item clearfix" id="inc-%id%"> <div class="item__description">%description%</div> <div class="right clearfix"><div class="item__value">%value%</div> <div class="item__date">%date%</div> <div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
             } else if (type === 'exp') {
                 element = DOMstrings.expensesContainer;
                 
-                html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+                html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div> <div class="item__date">%date%</div> <div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
             }
             
             // Replace the placeholder text with some actual data
             newHtml = html.replace('%id%', obj.id);
             newHtml = newHtml.replace('%description%', obj.description);
             newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
+            newHtml = newHtml.replace('%date%', obj.date);
+            
             
             // Insert the HTML into the DOM
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
@@ -308,11 +291,11 @@ var UIController = (function() {
         },
         
         
-        displayBudget: function(obj) {
+        displayBalanceSheet: function(obj) {
             var type;
-            obj.budget > 0 ? type = 'inc' : type = 'exp';
+            obj.balanceSheet > 0 ? type = 'inc' : type = 'exp';
             
-            document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+            document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.balanceSheet, type);
             document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
             document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
             
@@ -360,7 +343,8 @@ var UIController = (function() {
             var fields = document.querySelectorAll(
                 DOMstrings.inputType + ',' +
                 DOMstrings.inputDescription + ',' +
-                DOMstrings.inputValue);
+                DOMstrings.inputValue + ',' +
+                DOMstrings.inputDate);
             
             nodeListForEach(fields, function(cur) {
                cur.classList.toggle('red-focus'); 
@@ -381,10 +365,11 @@ var UIController = (function() {
 
 
 // GLOBAL APP CONTROLLER
-var controller = (function(budgetCtrl, UICtrl, dtbsCtrl) {
+var controller = (function(balanceSheetCtrl, UICtrl) {
+
+    var DOM = UICtrl.getDOMstrings();
     
     var setupEventListeners = function() {
-        var DOM = UICtrl.getDOMstrings();
         
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
@@ -400,26 +385,26 @@ var controller = (function(budgetCtrl, UICtrl, dtbsCtrl) {
     };
     
     
-    var updateBudget = function() {
+    var updateBalanceSheet = function() {
         
         // 1. Calculate the budget
-        budgetCtrl.calculateBudget();
+        balanceSheetCtrl.calculateBalanceSheet();
         
         // 2. Return the budget
-        var budget = budgetCtrl.getBudget();
+        var balanceSheet = balanceSheetCtrl.getBalanceSheet();
         
         // 3. Display the budget on the UI
-        UICtrl.displayBudget(budget);
+        UICtrl.displayBalanceSheet(balanceSheet);
     };
     
     
     var updatePercentages = function() {
         
         // 1. Calculate percentages
-        budgetCtrl.calculatePercentages();
+        balanceSheetCtrl.calculatePercentages();
         
         // 2. Read percentages from the budget controller
-        var percentages = budgetCtrl.getPercentages();
+        var percentages = balanceSheetCtrl.getPercentages();
         
         // 3. Update the UI with the new percentages
         UICtrl.displayPercentages(percentages);
@@ -434,7 +419,7 @@ var controller = (function(budgetCtrl, UICtrl, dtbsCtrl) {
         
         if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
             // 2. Add the item to the budget controller
-            newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+            newItem = balanceSheetCtrl.addItem(input.type, input.description, input.value, input.date);
 
             // 3. Add the item to the UI
             UICtrl.addListItem(newItem, input.type);
@@ -443,7 +428,7 @@ var controller = (function(budgetCtrl, UICtrl, dtbsCtrl) {
             UICtrl.clearFields();
 
             // 5. Calculate and update budget
-            updateBudget();
+            updateBalanceSheet();
             
             // 6. Calculate and update percentages
             updatePercentages();
@@ -464,35 +449,64 @@ var controller = (function(budgetCtrl, UICtrl, dtbsCtrl) {
             ID = parseInt(splitID[1]);
             
             // 1. delete the item from the data structure
-            budgetCtrl.deleteItem(type, ID);
+            balanceSheetCtrl.deleteItem(type, ID);
             
             // 2. Delete the item from the UI
             UICtrl.deleteListItem(itemID);
             
             // 3. Update and show the new budget
-            updateBudget();
+            updateBalanceSheet();
             
             // 4. Calculate and update percentages
             updatePercentages();
         }
-    }; 
+    };
     
     
     return {
         init: function() {
-            console.log('Application has started.');
-            UICtrl.displayMonth();
-            UICtrl.displayBudget({
-                budget: 0,
-                totalInc: 0,
-                totalExp: 0,
-                percentage: -1
-            });
-            setupEventListeners();
+            let accountJackTorrance = new XMLHttpRequest();
+            accountJackTorrance.open('GET', 'http://localhost:8080/api/balance');
+            accountJackTorrance.onload = function() {
+                
+                var dataAccountJackTorrance = JSON.parse(accountJackTorrance.responseText);
+                
+                document.querySelector(DOM.accountNameHolder).textContent = `Account Holder: ${dataAccountJackTorrance.account.name}`;
+                document.querySelector(DOM.accountIban).textContent = `IBAN: ${dataAccountJackTorrance.account.iban}`;
+                document.querySelector(DOM.accountBalance).textContent = `Balance: ${dataAccountJackTorrance.account.balance}`;
+                document.querySelector(DOM.accountCurrency).textContent = `Currency: ${dataAccountJackTorrance.currency}`;    
+                
+                
+
+                UICtrl.displayMonth();
+                UICtrl.displayBalanceSheet({
+                    balanceSheet: parseInt(dataAccountJackTorrance.account.balance),
+                    totalInc: 0,
+                    totalExp: 0,
+                    percentage: -1
+                });
+                setupEventListeners();
+
+
+
+            };
+            accountJackTorrance.send();
+
+
+            console.log('Application has started.');            
+
+            // UICtrl.displayMonth();
+            // UICtrl.displayBudget({
+            //     budget: 0,
+            //     totalInc: 0,
+            //     totalExp: 0,
+            //     percentage: -1
+            // });
+            // setupEventListeners();
         }
     };
     
-})(budgetController, UIController, databaseController);
+})(balanceSheetController, UIController);
 
 
 controller.init();
