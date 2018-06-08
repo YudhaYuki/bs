@@ -1,19 +1,25 @@
-let aBankAccount = new XMLHttpRequest();
-aBankAccount.open('GET', 'http://localhost:8080/api/balance');
-aBankAccount.onload = function() {
-    var i;
-    var dataABankAccount = JSON.parse(aBankAccount.responseText);
-    // console.log(dataABankAccount.currency)
-    document.querySelector('.account-details__name').textContent = `Account Holder: ${dataABankAccount.account.name}`;
-    document.querySelector('.account-details__iban').textContent = `IBAN: ${dataABankAccount.account.iban}`;
-    document.querySelector('.account-details__balance').textContent = `Balance: ${dataABankAccount.account.balance}`;
-    document.querySelector('.account-details__currency').textContent = `Currency: ${dataABankAccount.currency}`;
+var databaseController = (function() {
 
-    // console.log(dataABankAccount.account.name)
+    let accountJackTorrance = new XMLHttpRequest();
+    accountJackTorrance.open('GET', 'http://localhost:8080/api/balance');
+    accountJackTorrance.onload = function() {
+        var i;
+        var dataAccountJackTorrance = JSON.parse(accountJackTorrance.responseText);
+        // console.log(dataAccountJackTorrance.currency)
+        document.querySelector('.account-details__name').textContent = `Account Holder: ${dataAccountJackTorrance.account.name}`;
+        document.querySelector('.account-details__iban').textContent = `IBAN: ${dataAccountJackTorrance.account.iban}`;
+        document.querySelector('.account-details__balance').textContent = `Balance: ${dataAccountJackTorrance.account.balance}`;
+        document.querySelector('.account-details__currency').textContent = `Currency: ${dataAccountJackTorrance.currency}`;
     
-};
+        // console.log(dataAccountJackTorrance.account.name)
+        
+    };
+    
+    accountJackTorrance.send();
 
-aBankAccount.send();
+})();
+
+
 
 
 
@@ -193,6 +199,7 @@ var UIController = (function() {
     var DOMstrings = {
         inputType: '.add__type',
         inputDescription: '.add__description',
+        inputDate: '.add__date',        
         inputValue: '.add__value',
         inputBtn: '.add__btn',
         incomeContainer: '.income__list',
@@ -247,7 +254,9 @@ var UIController = (function() {
             return {
                 type: document.querySelector(DOMstrings.inputType).value, // Will be either inc or exp
                 description: document.querySelector(DOMstrings.inputDescription).value,
-                value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
+                value: parseFloat(document.querySelector(DOMstrings.inputValue).value),
+                date: document.querySelector(DOMstrings.inputDate).value
+                
             };
         },
         
@@ -371,9 +380,8 @@ var UIController = (function() {
 
 
 
-
 // GLOBAL APP CONTROLLER
-var controller = (function(budgetCtrl, UICtrl) {
+var controller = (function(budgetCtrl, UICtrl, dtbsCtrl) {
     
     var setupEventListeners = function() {
         var DOM = UICtrl.getDOMstrings();
@@ -467,7 +475,7 @@ var controller = (function(budgetCtrl, UICtrl) {
             // 4. Calculate and update percentages
             updatePercentages();
         }
-    };
+    }; 
     
     
     return {
@@ -484,7 +492,7 @@ var controller = (function(budgetCtrl, UICtrl) {
         }
     };
     
-})(budgetController, UIController);
+})(budgetController, UIController, databaseController);
 
 
 controller.init();
