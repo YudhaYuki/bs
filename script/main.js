@@ -6,21 +6,6 @@ var balanceSheetController = (function() {
         this.description = description;
         this.value = value;
         this.date = date;        
-        this.percentage = -1;
-    };
-    
-    
-    Expense.prototype.calcPercentage = function(totalIncome) {
-        if (totalIncome > 0) {
-            this.percentage = Math.round((this.value / totalIncome) * 100);
-        } else {
-            this.percentage = -1;
-        }
-    };
-    
-    
-    Expense.prototype.getPercentage = function() {
-        return this.percentage;
     };
     
     
@@ -51,7 +36,6 @@ var balanceSheetController = (function() {
             inc: 0
         },
         balance: 0,
-        percentage: -1
     };
     
     
@@ -114,40 +98,6 @@ var balanceSheetController = (function() {
             
             // Calculate the budget: income - expenses
             data.balanceSheet = data.totals.inc - data.totals.exp;
-            
-            // calculate the percentage of income that we spent
-            if (data.totals.inc > 0) {
-                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
-            } else {
-                data.percentage = -1;
-            }            
-            
-            // Expense = 100 and income 300, spent 33.333% = 100/300 = 0.3333 * 100
-        },
-        
-        calculatePercentages: function() {
-            
-            /*
-            a=20
-            b=10
-            c=40
-            income = 100
-            a=20/100=20%
-            b=10/100=10%
-            c=40/100=40%
-            */
-            
-            data.allItems.exp.forEach(function(cur) {
-               cur.calcPercentage(data.totals.inc);
-            });
-        },
-        
-        
-        getPercentages: function() {
-            var allPerc = data.allItems.exp.map(function(cur) {
-                return cur.getPercentage();
-            });
-            return allPerc;
         },
         
         
@@ -156,7 +106,6 @@ var balanceSheetController = (function() {
                 balanceSheet: data.balanceSheet,
                 totalInc: data.totals.inc,
                 totalExp: data.totals.exp,
-                percentage: data.percentage
             };
         },
         
@@ -184,9 +133,7 @@ var UIController = (function() {
         budgetLabel: '.budget__value',
         incomeLabel: '.budget__income--value',
         expensesLabel: '.budget__expenses--value',
-        percentageLabel: '.budget__expenses--percentage',
         container: '.container',
-        expensesPercLabel: '.item__percentage',
         dateLabel: '.budget__title--month',
         accountNameHolder: '.account-details__name',
         accountIban: '.account-details__iban',
@@ -252,7 +199,7 @@ var UIController = (function() {
             } else if (type === 'exp') {
                 element = DOMstrings.expensesContainer;
                 
-                html = '<div class="item item-left clearfix" id="exp-%id%"> <div class="item__date">%date%</div> <div class="item__description">%description%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__percentage">21%</div><div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"> </i></button></div></div></div>';
+                html = '<div class="item item-left clearfix" id="exp-%id%"> <div class="item__date">%date%</div> <div class="item__description">%description%</div> <div class="right clearfix"> <div class="item__value">%value%</div> <div class="item__delete"> <button class="item__delete--btn"><i class="ion-ios-close-outline"> </i></button></div></div></div>';
             }
             
             // Replace the placeholder text with some actual data
@@ -297,28 +244,7 @@ var UIController = (function() {
             document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.balanceSheet, type);
             document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
             document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
-            
-            if (obj.percentage > 0) {
-                document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + '%';
-            } else {
-                document.querySelector(DOMstrings.percentageLabel).textContent = '---';
-            }
-            
-        },
-        
-        
-        displayPercentages: function(percentages) {
-            
-            var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
-            
-            nodeListForEach(fields, function(current, index) {
-                
-                if (percentages[index] > 0) {
-                    current.textContent = percentages[index] + '%';
-                } else {
-                    current.textContent = '---';
-                }
-            });
+
             
         },
         
@@ -397,19 +323,6 @@ var controller = (function(balanceSheetCtrl, UICtrl) {
     };
     
     
-    var updatePercentages = function() {
-        
-        // 1. Calculate percentages
-        balanceSheetCtrl.calculatePercentages();
-        
-        // 2. Read percentages from the budget controller
-        var percentages = balanceSheetCtrl.getPercentages();
-        
-        // 3. Update the UI with the new percentages
-        UICtrl.displayPercentages(percentages);
-    };
-    
-    
     var ctrlAddItem = function() {
         var input, newItem;
         
@@ -429,8 +342,6 @@ var controller = (function(balanceSheetCtrl, UICtrl) {
             // 5. Calculate and update budget
             updateBalanceSheet();
             
-            // 6. Calculate and update percentages
-            updatePercentages();
         }
     };
     
@@ -456,8 +367,6 @@ var controller = (function(balanceSheetCtrl, UICtrl) {
             // 3. Update and show the new budget
             updateBalanceSheet();
             
-            // 4. Calculate and update percentages
-            updatePercentages();
         }
     };
     
@@ -482,7 +391,6 @@ var controller = (function(balanceSheetCtrl, UICtrl) {
                     balanceSheet: parseInt(dataAccountJackTorrance.account.balance),
                     totalInc: 0,
                     totalExp: 0,
-                    percentage: -1
                 });
                 setupEventListeners();
 
@@ -499,7 +407,6 @@ var controller = (function(balanceSheetCtrl, UICtrl) {
             //     budget: 0,
             //     totalInc: 0,
             //     totalExp: 0,
-            //     percentage: -1
             // });
             // setupEventListeners();
         }
