@@ -1,0 +1,116 @@
+.top {
+    height: 45vh;
+    background: $color-blue-second;
+    background-size: cover;
+    background-position: top;    
+    position: relative;
+  
+    @include respond(phone) {
+      height: 40vh;
+      
+    }
+  }
+  
+  // .account-details {
+  //   display: flex;
+  //   font-size: 2rem;
+  //   // justify-content: space-between;
+  //   // @include respond(phone) {
+  //   //   flex-direction: column;
+  //   // }
+  
+  //   @include respond(phone) {
+  //     font-size: 1rem;
+  //   }
+  // }
+  
+  .budget {
+    position: absolute;
+    width: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+  }
+  
+  .budget__title {
+    font-size: 1.3rem;
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: 300;
+  
+    @include respond(phone) {
+      font-size: 1rem;
+    }
+  }
+  
+  .budget__value {
+    font-weight: 300;
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+  
+      @include respond(phone) {
+        font-size: 1.5rem;
+      }
+  }
+  
+  .container_budget__income__expenses {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    
+  }
+  
+  .budget__income,
+  .budget__expenses {
+    padding: 12px;
+    text-transform: uppercase;
+  }
+  
+  .budget__income {
+    margin-bottom: 10px;
+    background-color: $color-blue;
+    font-size: 1rem;
+  }
+  
+  .budget__expenses {
+    background-color: $color-red;
+    font-size: 1rem;  
+  }
+  
+  .budget__income--text,
+  .budget__expenses--text {
+    float: left;
+    color: $color-grey;
+    margin-top: 2px;
+    font-size: 1rem;  
+    
+  
+    @include respond(phone) {
+      font-size: 1rem;
+    }
+  }
+  
+  .budget__income--value,
+  .budget__expenses--value {
+    letter-spacing: 1px;
+    float: left;
+  }
+  
+  .budget__income--percentage,
+  .budget__expenses--percentage {
+    float: left;
+    width: 34px;
+    font-size: 1.1rem;
+    padding: 3px 0;
+    margin-left: 10px;
+  }
+  
+  .budget__expenses--percentage {
+    background-color: rgba(255, 255, 255, 0.2);
+    text-align: center;
+    border-radius: 3px;
+  }
+  

@@ -1,28 +1,13 @@
-/* 
-*,
-*::after,
-*::before {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-}
-
-html {
-    font-size: 62.5%;
-}
-
-body {
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-    line-height: 1.7;
-    color: grey;
-    padding: 3rem;
-    box-sizing: border-box;
-}
+/*
+$breakpont argument choices:
+- phone
+- tab-port
+- tab-land
+- big-desktop
+ORDER : Base + typography > general layout + grid > page layout > component
+By adding "only screen", media query only gets applied to screens
+For example, when someone try to print this webpage, then these media queries don't apply
 */
-/**********************************************
-*** GENERAL
-**********************************************/
 * {
   margin: 0;
   padding: 0;
@@ -34,9 +19,9 @@ body {
   clear: both; }
 
 body {
-  color: #555;
+  color: #444;
   font-family: Open Sans;
-  font-size: 16px;
+  font-size: 62.5%;
   position: relative;
   height: 100vh;
   font-weight: 400; }
@@ -45,27 +30,20 @@ body {
   float: right; }
 
 .red {
-  color: #FF5049 !important; }
+  color: #FF4F49 !important; }
 
 .red-focus:focus {
   border: 1px solid #FF4F49 !important; }
 
-/**********************************************
-*** TOP PART
-**********************************************/
 .top {
-  height: 40vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(back.png);
+  height: 45vh;
+  background: #353537;
   background-size: cover;
-  background-position: center;
+  background-position: top;
   position: relative; }
-
-.account-details {
-  display: flex;
-  padding: 2rem 20rem;
-  text-align: left;
-  justify-content: space-between;
-  flex-direction: column; }
+  @media only screen and (max-width: 37.5em) {
+    .top {
+      height: 40vh; } }
 
 .budget {
   position: absolute;
@@ -76,17 +54,28 @@ body {
   color: #fff; }
 
 .budget__title {
-  font-size: 18px;
+  font-size: 1.3rem;
   text-align: center;
   margin-bottom: 10px;
   font-weight: 300; }
+  @media only screen and (max-width: 37.5em) {
+    .budget__title {
+      font-size: 1rem; } }
 
 .budget__value {
   font-weight: 300;
-  font-size: 46px;
+  font-size: 3rem;
   text-align: center;
   margin-bottom: 25px;
   letter-spacing: 2px; }
+  @media only screen and (max-width: 37.5em) {
+    .budget__value {
+      font-size: 1.5rem; } }
+
+.container_budget__income__expenses {
+  display: flex;
+  flex-direction: column;
+  margin: 20px; }
 
 .budget__income,
 .budget__expenses {
@@ -95,17 +84,23 @@ body {
 
 .budget__income {
   margin-bottom: 10px;
-  background-color: #28B9B5; }
+  background-color: #28B9B5;
+  font-size: 1rem; }
 
 .budget__expenses {
-  background-color: #FF5049; }
+  background-color: #FF4F49;
+  font-size: 1rem; }
 
 .budget__income--text,
 .budget__expenses--text {
   float: left;
-  font-size: 13px;
   color: #444;
-  margin-top: 2px; }
+  margin-top: 2px;
+  font-size: 1rem; }
+  @media only screen and (max-width: 37.5em) {
+    .budget__income--text,
+    .budget__expenses--text {
+      font-size: 1rem; } }
 
 .budget__income--value,
 .budget__expenses--value {
@@ -116,7 +111,7 @@ body {
 .budget__expenses--percentage {
   float: left;
   width: 34px;
-  font-size: 11px;
+  font-size: 1.1rem;
   padding: 3px 0;
   margin-left: 10px; }
 
@@ -125,29 +120,60 @@ body {
   text-align: center;
   border-radius: 3px; }
 
-/**********************************************
-*** BOTTOM PART
-**********************************************/
 /***** FORM *****/
 .add {
-  padding: 14px;
+  padding: 10px;
   border-bottom: 1px solid #e7e7e7;
   background-color: #f7f7f7; }
+  @media only screen and (max-width: 37.5em) {
+    .add {
+      padding: 14px; } }
 
 .add__container {
   margin: 0 auto;
   text-align: center; }
 
+.account-details__container {
+  display: flex;
+  justify-content: center; }
+  @media only screen and (max-width: 37.5em) {
+    .account-details__container {
+      flex-direction: column;
+      justify-content: start; } }
+
+.account-details__name,
+.account-details__iban,
+.account-details__balance,
+.account-details__currency {
+  font-size: 1rem;
+  margin: 0 1rem;
+  text-align: left; }
+
+.income_expense_container {
+  display: flex;
+  justify-content: center; }
+  @media only screen and (max-width: 37.5em) {
+    .income_expense_container {
+      flex-direction: column;
+      justify-content: start; } }
+
 .add__type {
   width: 70px;
   border: 1px solid #e7e7e7;
-  height: 44px;
-  font-size: 18px;
+  height: 60px;
+  font-size: 1.4rem;
   color: inherit;
   background-color: #fff;
+  padding: 12px 15px;
   margin-right: 10px;
   font-weight: 300;
   transition: border 0.3s; }
+  @media only screen and (max-width: 37.5em) {
+    .add__type {
+      width: 100%;
+      margin-bottom: 5px;
+      font-size: 1rem;
+      height: 55px; } }
 
 .add__description,
 .add__value,
@@ -156,20 +182,38 @@ body {
   background-color: #fff;
   color: inherit;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 1.2rem;
+  font-weight: 300;
   padding: 12px 15px;
   margin-right: 10px;
   border-radius: 5px;
   transition: border 0.3s; }
+  @media only screen and (max-width: 37.5em) {
+    .add__description,
+    .add__value,
+    .add__date {
+      font-size: 1rem; } }
 
 .add__description {
   width: 400px; }
+  @media only screen and (max-width: 37.5em) {
+    .add__description {
+      width: 100%;
+      margin-bottom: 5px; } }
+
+@media only screen and (max-width: 37.5em) {
+  .add__date {
+    width: 100%;
+    margin-bottom: 5px; } }
 
 .add__value {
-  width: 100px; }
+  width: 120px; }
+  @media only screen and (max-width: 37.5em) {
+    .add__value {
+      width: 100%; } }
 
 .add__btn {
-  font-size: 35px;
+  font-size: 3.5rem;
   background: none;
   border: none;
   color: #28B9B5;
@@ -178,6 +222,10 @@ body {
   vertical-align: middle;
   line-height: 1.1;
   margin-left: 10px; }
+  @media only screen and (max-width: 37.5em) {
+    .add__btn {
+      width: 100%;
+      margin-bottom: 5px; } }
 
 .add__btn:active {
   transform: translateY(2px); }
@@ -197,17 +245,22 @@ body {
   margin: 60px auto; }
 
 .income {
-  float: left;
   width: 475px;
   margin-right: 50px; }
+  @media only screen and (max-width: 37.5em) {
+    .income {
+      width: 100%;
+      margin-right: 0; } }
 
 .expenses {
-  float: left;
   width: 475px; }
+  @media only screen and (max-width: 37.5em) {
+    .expenses {
+      width: 320px; } }
 
 h2 {
   text-transform: uppercase;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 400;
   margin-bottom: 15px; }
 
@@ -218,8 +271,13 @@ h2 {
   color: #FF5049; }
 
 .item {
+  display: flex;
   padding: 13px;
   border-bottom: 1px solid #e7e7e7; }
+
+.item-left {
+  display: flex;
+  justify-content: space-between; }
 
 .item:first-child {
   border-top: 1px solid #e7e7e7; }
@@ -290,5 +348,5 @@ h2 {
 .unpaid .item__percentage {
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1); }
 
-.unpaid:hover .item__description {
-  font-weight: 900; }
+.unpaid:hover {
+  font-weight: 300; }
